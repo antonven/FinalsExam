@@ -15,7 +15,7 @@ public class PlayVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_video);
-
+        getSupportActionBar().setTitle("Twyks Video Player");
         Intent intent = getIntent();
         if (intent == null || !intent.hasExtra("VID_ID")) {
             throw new RuntimeException("PlayVideoActivity should accept a VID_ID passed as Intent argument");

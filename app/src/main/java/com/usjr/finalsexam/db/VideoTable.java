@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.widget.ListView;
 
+import com.usjr.finalsexam.controller.VideosController;
 import com.usjr.finalsexam.entity.Video;
 
 import java.util.ArrayList;
@@ -52,6 +54,14 @@ public class VideoTable {
 
     private static Video createVideoFromCursor(Cursor cursor) {
         // TODO: Implement this method
+        SQLiteDatabase db = null;
+        try{
+            cursor = db.rawQuery(SELECT_QUERY, null);
+
+
+        }catch (Exception e){
+
+        }
         return null;
     }
 
@@ -118,12 +128,29 @@ public class VideoTable {
     }
 
     public static List<Video> getAllVideos(Context context) {
-        List<Video> videos = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
 
+        List<Video> videos = new ArrayList<>();
+        DbHandler dbh = new DbHandler(context);
+        SQLiteDatabase db = dbh.getWritableDatabase();
+
+        Cursor cursor = null;
         try {
             // TODO: Implement retrieval of all video items from the database
+
+            cursor = db.rawQuery(SELECT_QUERY, null);
+            if(cursor.moveToFirst()) {
+                do {
+                    String mId = cursor.getString(cursor.getColumnIndex(VideoEntry._ID));
+                    String mTitle = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_TITLE));
+                    String mDescription = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_DESCRIPTION));
+                    String mThumbnail = cursor.getString(cursor.getColumnIndex(VideoEntry.COL_THUMBNAIL_URL));
+                    Video vd = new Video(mId, mTitle, mDescription, mThumbnail);
+                    videos.add(vd);
+                }while(cursor.moveToNext());
+            }
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
